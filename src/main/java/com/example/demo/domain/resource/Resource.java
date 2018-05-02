@@ -1,16 +1,16 @@
-package com.example.demo.domain.role;
+package com.example.demo.domain.resource;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Created By iljun
  * User : iljun
  * Date : 18. 5. 1
- * Time: 오후 12:26
+ * Time: 오후 10:03
  */
 @Data
-public class Role {
+public class Resource {
+
     private Long id;
     private String name;
 }

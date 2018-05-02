@@ -1,8 +1,10 @@
 package com.example.demo.domain.role;
 
-import com.example.demo.domain.privilege.Privilege;
+import com.example.demo.dto.RoleByUrl;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * Created By iljun
@@ -13,5 +15,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface RoleMapper {
     void save(Role role);
-    void rolesPrivilegesSave(@Param("roleId") Long roleId, @Param("privilegeId") Long privilegeId);
+    void rolesResourcesSave(@Param("resouceId") Long resourceId, @Param("roleId") Long roleId);
+    List<RoleByUrl> findByRoleAndResource(String url);
 }

@@ -1,17 +1,16 @@
 package com.example.demo.config.security;
 
-import com.example.demo.config.security.tokens.PostAuthorizationToken;
+import com.example.demo.config.jwt.tokens.JwtPostProcessingToken;
 import com.example.demo.domain.member.Member;
-import com.example.demo.dto.RolesPrivileges;
-import lombok.Builder;
+import com.example.demo.domain.role.Role;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -29,22 +28,23 @@ public class MemberContext extends User{
         this.member = member;
     }
 
-    public static MemberContext formMemberModel(Member member, List<RolesPrivileges> rolesPrivileges){
-        return new MemberContext(member,member.getName(),member.getPassword(),parseAuthorities(rolesPrivileges));
+    public MemberContext(String name, String password, String roles){
+        super(name,password,parseAuthorities(roles));
     }
 
-    private static List<SimpleGrantedAuthority> parseAuthorities(List<RolesPrivileges> rolesPrivilegesList){
-        Map<String,StringBuilder> map = new HashMap<>();
-        for(int i=0; i<rolesPrivilegesList.size();i++){
-            RolesPrivileges rolesPrivileges = rolesPrivilegesList.get(i);
-            if(map.containsKey(rolesPrivileges.getRoleName())){
-                map.put(rolesPrivileges.getRoleName(),map.get(rolesPrivileges.getRoleName()).append(", ").append(rolesPrivileges.getPrivilegeName()));
-            }else{
-                map.put(rolesPrivileges.getRoleName(),new StringBuilder().append(rolesPrivileges.getPrivilegeName()));
-            }
-        }
+    public static MemberContext getMemeberContext(Member member, List<Role> roles){
+        return new MemberContext(member,member.getName(),member.getPassword(),parseAuthorities(roles));
+    }
 
-        return rolesPrivilegesList.stream().map(r -> new SimpleGrantedAuthority(r.getPrivilegeName())).collect(Collectors.toList());
+    private static List<SimpleGrantedAuthority> parseAuthorities(List<Role> roles) {
+        return roles.stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getName()))
+                    .collect(Collectors.toList());
+    }
+
+    private static List<SimpleGrantedAuthority> parseAuthorities(String roles){
+        String[] tmp = roles.split(",");
+        return Arrays.asList(tmp).stream().map(role -> new SimpleGrantedAuthority(role.toString())).collect(Collectors.toList());
     }
 
     public Member getMember(){

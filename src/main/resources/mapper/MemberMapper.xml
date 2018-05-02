@@ -10,17 +10,6 @@
         WHERE name = #{username}
     </select>
 
-    <select id="findByUserIdAndRoleAndPrivilege" parameterType="Long" resultType="com.example.demo.dto.RolesPrivileges">
-        SELECT r1.name AS roleName,r2.name AS privilegeName
-        FROM
-	      (SELECT *
-	  	    FROM security.members_roles m JOIN security.Role r
-            ON m.role_id = r.id) r1,
-	      (SELECT * FROM security.roles_privileges t JOIN security.Privilege p
-            ON t.privilege_id = p.id) r2
-        WHERE r1.member_id=#{memberId};
-    </select>
-
     <insert id="save" parameterType="com.example.demo.domain.member.Member" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Member(name,password) VALUES(#{name},#{password})
     </insert>
@@ -28,4 +17,12 @@
     <insert id="membersRolesSave">
         INSERT INTO members_roles(member_id,role_id) VALUES(#{memberId},#{roleId})
     </insert>
+
+    <select id="findByUserIdAndRole" resultType="com.example.demo.domain.role.Role">
+        SELECT role.id, role.name
+        FROM security.Member member
+        INNER JOIN security.members_roles mr ON member.id = mr.member_id
+        INNER JOIN security.Role role ON mr.role_id = role.id
+        WHERE member.id = #{memberId};
+    </select>
 </mapper>

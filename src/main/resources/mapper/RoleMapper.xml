@@ -7,7 +7,15 @@
         INSERT INTO Role(name) VALUES(#{name});
     </insert>
 
-    <insert id="rolesPrivilegesSave">
-        INSERT INTO roles_privileges(role_id,privilege_id) VALUES(#{roleId},#{privilegeId})
+    <insert id="rolesResourcesSave" useGeneratedKeys="true">
+        INSERT INTO roles_resources(role_id,resource_id) VALUES(#{roleId},#{resourceId})
     </insert>
+
+    <select id="findByRoleAndResource" parameterType="com.example.demo.dto.RoleByUrl">
+        select role.name,resource.name
+        from security.Role role
+        INNER JOIN security.roles_resources rr on role.id = rr.role_id
+        INNER JOIN security.Resource resource on rr.resource_id = resource.id
+        WHERE resource.name = #{url}
+    </select>
 </mapper>

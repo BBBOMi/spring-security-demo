@@ -21,12 +21,6 @@ CREATE TABLE security.Role (
     `name` VARCHAR(45) NOT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS security.Privilege;
-CREATE TABLE security.Privilege (
-	`id` BIGINT PRIMARY KEY AUTO_INCREMENT,
-    `name` VARCHAR(45) NOT NULL
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
 DROP TABLE IF EXISTS security.members_roles;
 CREATE TABLE security.members_roles (
 	`member_id` BIGINT NOT NULL,
@@ -36,11 +30,17 @@ CREATE TABLE security.members_roles (
     CONSTRAINT members_roles_unique_key UNIQUE(`member_id`,`role_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS security.roles_privileges;
-CREATE TABLE security.roles_privileges (
+DROP TABLE IF EXISTS security.Resources;
+CREATE TABLE security.Resource(
+	`id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(45) NOT NULL
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS security.roles_resources;
+CREATE TABLE security.roles_resources (
 	`role_id` BIGINT NOT NULL,
-    `privilege_id` BIGINT NOT NULL,
+    `resource_id` BIGINT NOT NULL,
     FOREIGN KEY (`role_id`) REFERENCES `Role`(`id`),
-    FOREIGN KEY (`privilege_id`) REFERENCES `Privilege`(`id`),
-    CONSTRAINT roles_privileges_unique_key UNIQUE(`role_id`,`privilege_id`)
+    FOREIGN KEY (`resource_id`) REFERENCES `Resource`(`id`),
+    CONSTRAINT roles_resources_unique_key UNIQUE(`role_id`,`resource_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;

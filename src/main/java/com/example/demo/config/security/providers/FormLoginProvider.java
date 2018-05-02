@@ -6,6 +6,7 @@ import com.example.demo.config.security.tokens.PostAuthorizationToken;
 import com.example.demo.config.security.tokens.PreAuthorizationToken;
 import com.example.demo.domain.member.Member;
 import com.example.demo.domain.member.MemberMapper;
+import com.example.demo.domain.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,8 +45,9 @@ public class FormLoginProvider implements AuthenticationProvider {
         Optional<Member> member = Optional.ofNullable(memberMapper.findByUsername(username.get()));
         member.orElseThrow(() -> new LoginException("존재하지 않는 사용자입니다."));
 
+        List<Role> roles = memberMapper.findByUserIdAndRole(member.get().getId());
         if(passwordEncoder.matches(password.get(),member.get().getPassword())){
-            return PostAuthorizationToken.getTokenFromMemberContext(MemberContext.formMemberModel(member.get(),memberMapper.findByUserIdAndRoleAndPrivilege(member.get().getId())));
+            return PostAuthorizationToken.getPostAuthorizationToken(MemberContext.getMemeberContext(member.get(),roles));
         }
 
         throw new LoginException("패스워드가 일치하지 않습니다.");

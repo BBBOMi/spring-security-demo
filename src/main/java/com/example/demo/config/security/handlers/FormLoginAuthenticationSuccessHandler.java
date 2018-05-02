@@ -1,8 +1,7 @@
 package com.example.demo.config.security.handlers;
 
-import com.example.demo.api.request.FormLoginDto;
 import com.example.demo.api.response.FormLoginResponseDto;
-import com.example.demo.config.security.JwtFactory;
+import com.example.demo.config.jwt.JwtFactory;
 import com.example.demo.config.security.MemberContext;
 import com.example.demo.config.security.tokens.PostAuthorizationToken;
 import com.fasterxml.jackson.databind.ObjectMapper;

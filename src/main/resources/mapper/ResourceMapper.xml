@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.domain.resource.ResourceMapper">
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO security.Resource(name) VALUES(#{name})
+    </insert>
+
+    <select id="findAllResources" parameterType="java.lang.String">
+        SELECT resource.name
+        FROM security.Resource resource
+    </select>
+</mapper>

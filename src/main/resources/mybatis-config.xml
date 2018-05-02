@@ -5,12 +5,10 @@
 <configuration>
     <typeAliases>
         <package name="com.example.demo.domain.member.MemberMapper"/>
-        <package name="com.example.demo.domain.privilege.PrivilegeMapper"/>
         <package name="com.example.demo.domain.role.RoleMapper"/>
     </typeAliases>
     <mappers>
         <mapper resource="mapper/MemberMapper.xml"/>
-        <mapper resource="mapper/PrivilegeMapper.xml"/>
         <mapper resource="mapper/RoleMapper.xml"/>
     </mappers>
 </configuration>

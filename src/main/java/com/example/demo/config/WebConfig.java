@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Time: 오후 2:11
  */
 @Configuration
-@EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override

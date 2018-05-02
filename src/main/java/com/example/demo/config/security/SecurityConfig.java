@@ -1,12 +1,15 @@
 package com.example.demo.config.security;
 
+import com.example.demo.config.jwt.filters.JwtFilter;
+import com.example.demo.config.jwt.filters.JwtRequestMatcher;
+import com.example.demo.config.jwt.handlers.JwtAuthenticationFailureHandler;
+import com.example.demo.config.jwt.providers.JwtProvider;
 import com.example.demo.config.security.filters.FormLoginFilter;
 import com.example.demo.config.security.handlers.FormLoginAuthenticationFailureHandler;
 import com.example.demo.config.security.handlers.FormLoginAuthenticationSuccessHandler;
 import com.example.demo.config.security.providers.FormLoginProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created By iljun
@@ -58,15 +61,32 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private FormLoginProvider formLoginProvider;
 
+    @Autowired
+    private JwtAuthenticationFailureHandler jwtAuthenticationFailureHandler;
+
+    @Autowired
+    private JwtProvider jwtProvider;
+
+
     protected FormLoginFilter getFormLoginFilter() throws Exception{
         FormLoginFilter filter = new FormLoginFilter("/formLogin",formLoginAuthenticationSuccessHandler,formLoginAuthenticationFailureHandler);
         filter.setAuthenticationManager(super.authenticationManagerBean());
         return filter;
     }
+
+    protected JwtFilter getJwtFilter() throws Exception{
+        JwtRequestMatcher jwtRequestMatcher = new JwtRequestMatcher(Arrays.asList("/formLogin"),"/**");
+        JwtFilter jwtFilter = new JwtFilter(jwtRequestMatcher,jwtAuthenticationFailureHandler);
+        jwtFilter.setAuthenticationManager(super.authenticationManagerBean());
+
+        return jwtFilter;
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .authenticationProvider(this.formLoginProvider);
+                .authenticationProvider(this.formLoginProvider)
+                .authenticationProvider(this.jwtProvider);
 
     }
 
@@ -89,7 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable();
 
         http
-                .addFilterBefore(getFormLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(getFormLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(getJwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 

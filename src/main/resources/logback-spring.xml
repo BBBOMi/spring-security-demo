@@ -19,7 +19,13 @@
     </appender>
 
     <logger name="org.springframework.web" level="INFO"/>
-    <logger name="org.hibernate.SQL" level="INFO"/>
+    <logger name="org.springframework.security" level="INFO"/>
+
+    <logger name="java.sql" level="error" />
+    <logger name="jdbc.sqlonly" level="debug" />
+    <logger name="jdbc.sqltiming" level="debug" />
+    <logger name="jdbc.audit" level="error" />
+    <logger name="jdbc.resultset" level="error" />
 
     <springProfile name="local">
         <root level="INFO">

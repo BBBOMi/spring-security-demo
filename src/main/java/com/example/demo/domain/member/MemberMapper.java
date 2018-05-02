@@ -1,11 +1,10 @@
 package com.example.demo.domain.member;
 
-import com.example.demo.dto.RolesPrivileges;
+import com.example.demo.domain.role.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created By iljun
@@ -16,7 +15,7 @@ import java.util.Optional;
 @Mapper
 public interface MemberMapper {
     Member findByUsername(String username);
-    List<RolesPrivileges> findByUserIdAndRoleAndPrivilege(Long memberId);
     void save(Member member);
     void membersRolesSave(@Param("memberId") Long memberId, @Param("roleId") Long roleId);
+    List<Role> findByUserIdAndRole(Long memberId);
 }

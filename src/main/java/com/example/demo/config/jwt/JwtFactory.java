@@ -1,7 +1,8 @@
-package com.example.demo.config.security;
+package com.example.demo.config.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.demo.config.security.MemberContext;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
