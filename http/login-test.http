@@ -1,6 +1,20 @@
 POST http://localhost:8080/formLogin
 Content-Type: application/json
 
-{ "username" : "wonwoo" ,"password":"wonwoo"}
+{ "username" : "admin" ,"password":"admin"}
 
-###
+### admin
+
+POST http://localhost:8080/formLogin
+Content-Type: application/json
+
+{"username" : "user" ,"password" : "user"}
+
+### user
+
+POST http://localhost:8080/formLogin
+Content-Type: application/json
+
+{"username" : "empty" , "password" : "empty"}
+
+### empty

@@ -1,5 +1,17 @@
 GET http://localhost:8080/api/admin
 Content-Type: application/json
-Authorization: Bearer
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZWN1cml0eURlbW8iLCJVU0VSTkFNRSI6ImFkbWluIiwiVVNFUl9ST0xFIjoiW1JPTEVfQURNSU5dIn0.-TUJ0LbtHa9I3pJnlXMFbM9uTbRfW-i8ndoepDQbYI4
+
+###
+
+GET http://localhost:8080/api/home
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZWN1cml0eURlbW8iLCJVU0VSTkFNRSI6ImFkbWluIiwiVVNFUl9ST0xFIjoiW1JPTEVfQURNSU5dIn0.-TUJ0LbtHa9I3pJnlXMFbM9uTbRfW-i8ndoepDQbYI4
+
+###
+
+GET http://localhost:8080/api/user
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzZWN1cml0eURlbW8iLCJVU0VSTkFNRSI6ImFkbWluIiwiVVNFUl9ST0xFIjoiW1JPTEVfQURNSU5dIn0.-TUJ0LbtHa9I3pJnlXMFbM9uTbRfW-i8ndoepDQbYI4
 
 ###

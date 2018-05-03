@@ -16,5 +16,5 @@ import java.util.List;
 public interface RoleMapper {
     void save(Role role);
     void rolesResourcesSave(@Param("resouceId") Long resourceId, @Param("roleId") Long roleId);
-    List<RoleByUrl> findByRoleAndResource(String url);
+    List<String> findByRoleAndResource(String url);
 }

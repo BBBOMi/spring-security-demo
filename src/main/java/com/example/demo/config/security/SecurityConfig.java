@@ -4,14 +4,21 @@ import com.example.demo.config.jwt.filters.JwtFilter;
 import com.example.demo.config.jwt.filters.JwtRequestMatcher;
 import com.example.demo.config.jwt.handlers.JwtAuthenticationFailureHandler;
 import com.example.demo.config.jwt.providers.JwtProvider;
+import com.example.demo.config.security.filters.CustomFilterInvocationSecurityMetadataSource;
+import com.example.demo.config.security.filters.CustomVote;
 import com.example.demo.config.security.filters.FormLoginFilter;
 import com.example.demo.config.security.handlers.FormLoginAuthenticationFailureHandler;
 import com.example.demo.config.security.handlers.FormLoginAuthenticationSuccessHandler;
 import com.example.demo.config.security.providers.FormLoginProvider;
+import com.example.demo.domain.resource.ResourceMapper;
+import com.example.demo.domain.role.RoleMapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,9 +29,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created By iljun
@@ -67,6 +76,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtProvider jwtProvider;
 
+    @Autowired
+    private RoleMapper roleMapper;
 
     protected FormLoginFilter getFormLoginFilter() throws Exception{
         FormLoginFilter filter = new FormLoginFilter("/formLogin",formLoginAuthenticationSuccessHandler,formLoginAuthenticationFailureHandler);
@@ -80,6 +91,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtFilter.setAuthenticationManager(super.authenticationManagerBean());
 
         return jwtFilter;
+    }
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<? extends Object>> decisionVoters
+                = Arrays.asList(
+                new CustomVote());
+        return new UnanimousBased(decisionVoters);
+    }
+
+    @Bean
+    protected FilterSecurityInterceptor getFilterInvocationSecurityMetadataSource() throws Exception{
+        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        filterSecurityInterceptor.setAuthenticationManager(super.authenticationManagerBean());//authentication Manger
+        filterSecurityInterceptor.setSecurityMetadataSource(new CustomFilterInvocationSecurityMetadataSource(roleMapper));//대상 정보
+        filterSecurityInterceptor.setAccessDecisionManager(accessDecisionManager());//판단 주체
+        return filterSecurityInterceptor;
     }
 
     @Override
@@ -110,7 +138,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .addFilterBefore(getFormLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(getJwtFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(getJwtFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(getFilterInvocationSecurityMetadataSource(),FilterSecurityInterceptor.class);
 
     }
 

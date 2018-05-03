@@ -41,5 +41,6 @@ dependencies {
 	compileOnly "org.projectlombok:lombok:1.16.16"
 	compile group: 'com.googlecode.log4jdbc', name: 'log4jdbc', version: '1.2'
 	testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+	compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4', version: '1.16'
 
 }

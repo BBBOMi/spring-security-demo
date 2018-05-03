@@ -11,4 +11,15 @@
         SELECT resource.name
         FROM security.Resource resource
     </select>
+
+    <select id="findByRoleName" resultType="java.lang.String">
+        SELECT resource.name
+        FROM security.Role role
+        INNER JOIN security.roles_resources rr ON role.id = rr.role_id
+        INNER JOIN security.Resource resource ON rr.resource_id = resource.id
+        WHERE role.name IN
+                <foreach collection="roleName" item="item" open="(" close=")" separator=",">
+                  #{item}
+                </foreach>
+    </select>
 </mapper>

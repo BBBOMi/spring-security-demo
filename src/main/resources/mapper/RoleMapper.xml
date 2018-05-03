@@ -3,6 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.domain.role.RoleMapper">
+    <cache eviction="LRU" flushInterval="60000" size="512" readOnly="true"/>
+
     <insert id="save" parameterType="com.example.demo.domain.role.Role" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO Role(name) VALUES(#{name});
     </insert>
@@ -11,8 +13,8 @@
         INSERT INTO roles_resources(role_id,resource_id) VALUES(#{roleId},#{resourceId})
     </insert>
 
-    <select id="findByRoleAndResource" parameterType="com.example.demo.dto.RoleByUrl">
-        select role.name,resource.name
+    <select id="findByRoleAndResource" resultType="java.lang.String">
+        select role.name
         from security.Role role
         INNER JOIN security.roles_resources rr on role.id = rr.role_id
         INNER JOIN security.Resource resource on rr.resource_id = resource.id

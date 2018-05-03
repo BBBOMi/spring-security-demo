@@ -1,6 +1,7 @@
 package com.example.demo.domain.resource;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,5 @@ import java.util.List;
 public interface ResourceMapper {
     void save(Resource resource);
     List<String> findAllResources();
+    List<String> findByRoleName(@Param("roleName") String[] roleName);
 }
